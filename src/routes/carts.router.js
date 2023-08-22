@@ -1,20 +1,22 @@
 import { Router } from "express";
-import CartManager from "../CartManager.js";
+import CartManager from "../dao/CartManager.js";
 
 const cartsRouter = Router();
 const CM = new CartManager();
 
-cartsRouter.post("/", (req, res) => {
-    if (CM.newCart()) {
+cartsRouter.post("/", async (req, res) => {
+    const newCart = await CM.newCart();
+
+    if (newCart) {
         res.send({status:"ok", message:"El Carrito se creó correctamente!"});
     } else {
         res.status(500).send({status:"error", message:"Error! No se pudo crear el Carrito!"});
     }
 });
 
-cartsRouter.get("/:cid", (req, res) => {
-    const cid = Number(req.params.cid);
-    const cart = CM.getCart(cid);
+cartsRouter.get("/:cid", async (req, res) => {
+    const cid = req.params.cid;
+    const cart = await CM.getCart(cid);
 
     if (cart) {
         res.send({products:cart.products});
@@ -23,19 +25,15 @@ cartsRouter.get("/:cid", (req, res) => {
     }
 });
 
-cartsRouter.post("/:cid/products/:pid", (req, res) => {
-    const cid = Number(req.params.cid);
-    const pid = Number(req.params.pid);
-    const cart = CM.getCart(cid);
+cartsRouter.post("/:cid/products/:pid", async (req, res) => {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const result = await CM.addProductToCart(cid, pid);
 
-    if (cart) {
-        if (CM.addProductToCart(cid, pid)) {
-            res.send({status:"ok", message:"El producto se agregó correctamente!"});
-        } else {
-            res.status(400).send({status:"error", message:"Error! No se pudo agregar el Producto al Carrito!"});
-        }
+    if (result) {
+        res.send({status:"ok", message:"El producto se agregó correctamente!"});
     } else {
-        res.status(400).send({status:"error", message:"Error! No se encuentra el ID de Carrito!"});
+        res.status(400).send({status:"error", message:"Error! No se pudo agregar el Producto al Carrito!"});
     }
 });
 

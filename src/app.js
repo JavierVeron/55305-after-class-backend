@@ -3,7 +3,9 @@ import __dirname from "./utils.js";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/views.routes.js";
 import {Server} from "socket.io";
-import ProductManager from "./ProductManager.js";
+import ProductManager from "./dao/ProductManager.js";
+import ChatManager from "./dao/ChatManager.js";
+import mongoose from "mongoose";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -16,6 +18,7 @@ const httpServer = app.listen(puerto, () => {
 
 const socketServer = new Server(httpServer);
 const PM = new ProductManager();
+const CM = new ChatManager();
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -26,6 +29,8 @@ app.use(express.urlencoded({extended:true}));
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/", viewsRouter);
+
+mongoose.connect("mongodb+srv://CoderJavier:Javier123!@codercluster.rnwzt3p.mongodb.net/ecommerce?retryWrites=true&w=majority");
 
 socketServer.on("connection", (socket) => {
     console.log("Nueva Conexión!");
@@ -45,4 +50,11 @@ socketServer.on("connection", (socket) => {
         const products = PM.getProducts();
         socket.emit("realTimeProducts", products);
     });
+
+    socket.on("newMessage", async (data) => {
+        CM.createMessage(data);
+        const messages = await CM.getMessages();
+        socket.emit("messages", messages);
+    });
 });
+

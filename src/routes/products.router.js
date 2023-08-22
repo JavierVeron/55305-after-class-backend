@@ -1,24 +1,24 @@
 import { Router } from "express";
-import ProductManager from "../ProductManager.js";
+import ProductManager from "../dao/ProductManager.js";
 
 const productsRouter = Router();
 const PM = new ProductManager();
 
-productsRouter.get("/", (req, res) => {
-    const products = PM.getProducts();
+productsRouter.get("/", async (req, res) => {
     let {limit} = req.query;
+    const products = await PM.getProducts(limit);
 
-    res.send({products:limit ? products.slice(0, limit) : products});
+    res.send({products});
 });
 
-productsRouter.get("/:pid", (req, res) => {
-    const products = PM.getProducts();
-    let pid = Number(req.params.pid);
+productsRouter.get("/:pid", async (req, res) => {
+    let pid = req.params.pid;
+    const products = await PM.getProductById(pid);
     
-    res.send({product:products.find(item => item.id === pid) || "Error! El ID de Producto no existe!"});
+    res.send({products});
 });
 
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", async (req, res) => {
     let {title, description, code, price, status, stock, category, thumbnails} = req.body;
 
     if (!title) {
@@ -61,15 +61,17 @@ productsRouter.post("/", (req, res) => {
         return false;
     }
 
-    if (PM.addProduct({title, description, code, price, status, stock, category, thumbnails})) {
+    const result = await PM.addProduct({title, description, code, price, status, stock, category, thumbnails}); 
+
+    if (result) {
         res.send({status:"ok", message:"El Producto se agregó correctamente!"});
     } else {
         res.status(500).send({status:"error", message:"Error! No se pudo agregar el Producto!"});
     }
 });
 
-productsRouter.put("/:pid", (req, res) => {
-    let pid = Number(req.params.pid);
+productsRouter.put("/:pid", async (req, res) => {
+    let pid = req.params.pid;
     let {title, description, code, price, status, stock, category, thumbnails} = req.body;
 
     if (!title) {
@@ -112,17 +114,20 @@ productsRouter.put("/:pid", (req, res) => {
         return false;
     }
 
-    if (PM.updateProduct(pid, {title, description, code, price, status, stock, category, thumbnails})) {
+    const result = await PM.updateProduct(pid, {title, description, code, price, status, stock, category, thumbnails});
+
+    if (result) {
         res.send({status:"ok", message:"El Producto se actualizó correctamente!"});
     } else {
         res.status(500).send({status:"error", message:"Error! No se pudo actualizar el Producto!"});
     }
 });
 
-productsRouter.delete("/:pid", (req, res) => {
-    let pid = Number(req.params.pid);
+productsRouter.delete("/:pid", async (req, res) => {
+    let pid = req.params.pid;
+    const result = await PM.deleteProduct(pid)
 
-    if (PM.deleteProduct(pid)) {
+    if (result) {
         res.send({status:"ok", message:"El Producto se eliminó correctamente!"});
     } else {
         res.status(500).send({status:"error", message:"Error! No se pudo eliminar el Producto!"});
