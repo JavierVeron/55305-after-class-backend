@@ -5,8 +5,7 @@ const productsRouter = Router();
 const PM = new ProductManager();
 
 productsRouter.get("/", async (req, res) => {
-    let {limit} = req.query;
-    const products = await PM.getProducts(limit);
+    const products = await PM.getProducts(req.query);
 
     res.send({products});
 });

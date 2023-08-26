@@ -47,6 +47,66 @@ class CartManager {
             return false
         }
     }
+
+    async updateQuantityProductFromCart(cid, pid, quantity) {
+        try {
+            if (this.validateId(cid)) {
+                const cart = await this.getCart(cid);
+                const product = cart.products.find(item => item.product === pid);
+                product.quantity = quantity;
+
+                await cartModel.updateOne({_id:cid}, {products:cart.products});
+                console.log("Product updated!");
+    
+                return true;
+            } else {
+                console.log("Not found!");
+                
+                return false;
+            }
+        } catch (error) {
+            return false
+        }
+    }
+
+    async deleteProductFromCart(cid, pid) {
+        try {
+            if (this.validateId(cid)) {
+                const cart = await this.getCart(cid);
+                const products = cart.products.filter(item => item.product !== pid);
+
+                await cartModel.updateOne({_id:cid}, {products:products});
+                console.log("Product deleted!");
+    
+                return true;
+            } else {
+                console.log("Not found!");
+                
+                return false;
+            }
+        } catch (error) {
+            return false
+        }
+    }
+
+    async deleteProductsFromCart(cid) {
+        try {
+            if (this.validateId(cid)) {
+                const cart = await this.getCart(cid);
+
+                await cartModel.updateOne({_id:cid}, {products:[]});
+                console.log("Products deleted!");
+    
+                return true;
+            } else {
+                console.log("Not found!");
+                
+                return false;
+            }
+        } catch (error) {
+            return false
+        }
+    }
     
     validateId(id) {
         return id.length === 24 ? true : false;

@@ -1,9 +1,10 @@
 <div class="container">
+    {{this.page}} // {{this.status}}
     <div class="row">
         {{#each this.payload}}
             <div class="col-md-4">
                 <div class="card border-0 mb-3">
-                    <img src="{{this.thumbnails}}" class="img-fluid" alt="{{this.title}}">
+                    <img src="{{this.payload.thumbnails}}" class="img-fluid" alt="{{this.title}}">
                     <div class="card-body text-center">
                         <p class="card-text">{{this.payload.title}}<br><span class="text-danger">${{this.price}}</span></p>
                     </div>
