@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-2">
+            <img src="{{product.thumbnails}}" alt="{{product.title}}" class="img-fluid">
+        </div>
+        <div class="col-md-4">
+            <h1 class="fs-1 fw-light">{{product.title}}</h1>
+            <p class="fs-2 fw-light text-danger">${{product.price}}</p>
+            <p><button class="btn btn-dark" onclick="agregarProductoAlCarrito('{{product._id}}')">Agregar (+)</button></p>
+            <p class="fw-light">{{product.description}}</p>
+        </div>
+    </div>
+</div>
+
+<script src="../js/products.js"></script>

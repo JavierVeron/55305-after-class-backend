@@ -65,10 +65,10 @@ class ProductManager {
         let products = await productModel.paginate(query, {limit:limit, page:page, sort:{price:sort}});
         let status = products ? "success" : "error";
 
-        let prevLink = products.hasPrevPage ? "http://localhost:8080/api/products?limit=" + limit + "&page=" + products.prevPage : null;
-        let nextLink = products.hasNextPage ? "http://localhost:8080/api/products?limit=" + limit + "&page=" + products.nextPage : null;
+        let prevLink = products.hasPrevPage ? "http://localhost:8080/products?limit=" + limit + "&page=" + products.prevPage : null;
+        let nextLink = products.hasNextPage ? "http://localhost:8080/products?limit=" + limit + "&page=" + products.nextPage : null;
         
-        products = {status:status, payload:products.docs, prevPage:products.prevPage, nextPage:products.nextPage, page:products.page, hasPrevPage:products.hasPrevPage, hasNextPage:products.hasNextPage, prevLink:prevLink, nextLink:nextLink};
+        products = {status:status, payload:products.docs, totalPages:products.totalPages, prevPage:products.prevPage, nextPage:products.nextPage, page:products.page, hasPrevPage:products.hasPrevPage, hasNextPage:products.hasNextPage, prevLink:prevLink, nextLink:nextLink};
 
         return products;
     }

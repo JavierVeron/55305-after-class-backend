@@ -2,10 +2,10 @@ import { cartModel } from "./models/cart.model.js";
 
 class CartManager {
     async newCart() {
-        await cartModel.create({products:[]});
+        let cart = await cartModel.create({products:[]});
         console.log("Cart created!");
 
-        return true;
+        return cart;
     }
 
     async getCart(id) {

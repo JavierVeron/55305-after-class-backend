@@ -1,31 +1,33 @@
 import express from "express";
 import __dirname from "./utils.js";
-import handlebars from "express-handlebars";
-import viewsRouter from "./routes/views.routes.js";
-import {Server} from "socket.io";
+import expressHandlebars from "express-handlebars";
+import Handlebars from "handlebars";
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+import { Server } from "socket.io";
+import mongoose from "mongoose";
 import ProductManager from "./dao/ProductManager.js";
 import ChatManager from "./dao/ChatManager.js";
-import mongoose from "mongoose";
-
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
+import viewsRouter from "./routes/views.routes.js";
 
 const app = express();
 const puerto = 8080;
 const httpServer = app.listen(puerto, () => {
     console.log("Servidor Activo en el puerto: " + puerto);
 });
-
 const socketServer = new Server(httpServer);
 const PM = new ProductManager();
 const CM = new ChatManager();
 
-app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
+app.engine('handlebars', expressHandlebars.engine({
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
+}));
 app.set("view engine", "handlebars");
-app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(express.static(__dirname + "/public"));
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/", viewsRouter);
@@ -57,4 +59,3 @@ socketServer.on("connection", (socket) => {
         socket.emit("messages", messages);
     });
 });
-
