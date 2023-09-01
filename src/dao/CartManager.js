@@ -22,7 +22,7 @@ class CartManager {
         return await cartModel.find().lean();
     }
 
-    async addProductToCart(cid, pid) {
+    async addProduct(cid, pid) {
         try {
             if (this.validateId(cid)) {
                 const cart = await this.getCart(cid);
@@ -48,7 +48,24 @@ class CartManager {
         }
     }
 
-    async updateQuantityProductFromCart(cid, pid, quantity) {
+    async updateProducts(cid, products) {
+        try {
+            if (this.validateId(cid)) {
+                await cartModel.findOneAndUpdate({_id:cid}, {products:products}, {new:true, upsert:true});
+                console.log("Product updated!");
+    
+                return true;
+            } else {
+                console.log("Not found!");
+                
+                return false;
+            }
+        } catch (error) {
+            return false
+        }
+    }
+
+    async updateQuantity(cid, pid, quantity) {
         try {
             if (this.validateId(cid)) {
                 const cart = await this.getCart(cid);
@@ -69,7 +86,7 @@ class CartManager {
         }
     }
 
-    async deleteProductFromCart(cid, pid) {
+    async deleteProduct(cid, pid) {
         try {
             if (this.validateId(cid)) {
                 const cart = await this.getCart(cid);
@@ -89,7 +106,7 @@ class CartManager {
         }
     }
 
-    async deleteProductsFromCart(cid) {
+    async deleteProducts(cid) {
         try {
             if (this.validateId(cid)) {
                 const cart = await this.getCart(cid);

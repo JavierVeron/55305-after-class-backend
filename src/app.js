@@ -9,6 +9,7 @@ import ProductManager from "./dao/ProductManager.js";
 import ChatManager from "./dao/ChatManager.js";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
+import sessionsRouter from "./routes/sessions.routes.js";
 import viewsRouter from "./routes/views.routes.js";
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
+app.use("/api/sessions/", sessionsRouter);
 app.use("/", viewsRouter);
 
 mongoose.connect("mongodb+srv://CoderJavier:Javier123!@codercluster.rnwzt3p.mongodb.net/ecommerce?retryWrites=true&w=majority");
