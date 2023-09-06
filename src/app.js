@@ -11,9 +11,29 @@ import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import sessionsRouter from "./routes/sessions.routes.js";
 import viewsRouter from "./routes/views.routes.js";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import MongoStore from "connect-mongo";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 const app = express();
 const puerto = 8080;
+app.use(cookieParser()); 
+app.use(session({
+    store:MongoStore.create({
+        mongoUrl:"mongodb+srv://CoderJavier:Javier123!@codercluster.rnwzt3p.mongodb.net/ecommerce?retryWrites=true&w=majority",
+        mongoOptions:{useNewUrlParser:true, useUnifiedTopology:true},
+        ttl:20
+    }),
+    secret:"S3cr3t0",
+    resave:false,
+    saveUninitialized:false
+}));
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 const httpServer = app.listen(puerto, () => {
     console.log("Servidor Activo en el puerto: " + puerto);
 });

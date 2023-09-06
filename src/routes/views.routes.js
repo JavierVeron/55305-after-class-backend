@@ -49,5 +49,8 @@ router.get("/profile", (req, res) => {
     res.render("profile");
 });
 
+router.get("/restore", async (req, res) => {
+    res.render("restore");
+})
 
 export default router;

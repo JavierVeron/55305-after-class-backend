@@ -12,13 +12,28 @@ class UserManager {
         }
     }
 
-    async login(user, pass) {
+    async login(user) {
         try {
-            const userLogged = await userModel.findOne({$and:[{email:user}, {password:pass}]}) || null;
+            const userLogged = await userModel.findOne({email:user}) || null;
             
             if (userLogged) {
                 console.log("User logged!");
-                return user;
+                return userLogged;
+            }
+
+            return false;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async restorePassword(user, pass) {
+        try {
+            const userLogged = await userModel.updateOne({email:user}, {password:pass}) || null;
+            
+            if (userLogged) {
+                console.log("Password Restored!");
+                return userLogged;
             }
 
             return false;
