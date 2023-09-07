@@ -51,6 +51,14 @@ router.get("/profile", (req, res) => {
 
 router.get("/restore", async (req, res) => {
     res.render("restore");
-})
+});
+
+router.get("/faillogin", (req, res) => {
+    res.send({status:"error", message:"Login inválido!"});
+});
+
+router.get("/failregister", (req, res) => {
+    res.send({status:"Error", message:"Error! No se pudo registar el Usuario!"});
+});
 
 export default router;

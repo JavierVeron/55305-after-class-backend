@@ -24,7 +24,7 @@ app.use(session({
     store:MongoStore.create({
         mongoUrl:"mongodb+srv://CoderJavier:Javier123!@codercluster.rnwzt3p.mongodb.net/ecommerce?retryWrites=true&w=majority",
         mongoOptions:{useNewUrlParser:true, useUnifiedTopology:true},
-        ttl:20
+        ttl:10000
     }),
     secret:"S3cr3t0",
     resave:false,

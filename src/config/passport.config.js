@@ -11,8 +11,7 @@ const initializePassport = () => {
             const {first_name, last_name, email, age} = req.body;
 
             try {
-                let user = userModel.findOne({email:email});
-                console.log(user);
+                let user = await userModel.findOne({email:username});
 
                 if (user) {
                     console.log("El usuario " + email + " ya se encuentra registrado!");
@@ -20,29 +19,21 @@ const initializePassport = () => {
                 }
 
                 user = {first_name, last_name, email, age, password:createHash(password)};
-                let result = userModel.create(user);
+                let result = await userModel.create(user);
 
                 if (result) {
                     return done(null, result);
                 }
             } catch (error) {
-                return done(null, "Error: " + error);
+                return done(error);
             }
         }
     ));
 
-    passport.serializeUser((user, done) => {
-        done(null, user._id);
-    });
-
-    passport.deserializeUser(async (id, done) => {
-        let user = await userModel.findById(id);
-        done(null, user);
-    });
-
     passport.use("login", new LocalStrategy({usernameField:"email"}, async (username, password, done) => {
         try {
             let user = await userModel.findOne({email:username});
+            console.log(user);
 
             if (!user) {
                 console.log("Error! El usuario no existe!");
@@ -56,9 +47,18 @@ const initializePassport = () => {
 
             return done(null, user);
         } catch (error) {
-            return done(null, "Error: " + error);
+            return done(error);
         }
     }));
+
+    passport.serializeUser((user, done) => {
+        done(null, user._id);
+    });
+
+    passport.deserializeUser(async (id, done) => {
+        let user = await userModel.findById(id);
+        done(null, user);
+    });
 };
 
 export default initializePassport;

@@ -39,10 +39,6 @@ router.get("/login", passport.authenticate("login", {failureRedirect:"/faillogin
     res.send({status:"OK", message:"Hola, " + userLogged.first_name + "!"});
 });
 
-router.get("/faillogin", (req, res) => {
-    res.send({status:"error", message:"Login inválido!"});
-})
-
 /* router.post("/register", async (req, res) => {
     const {first_name, last_name, email, age, password} = req.body;
 
@@ -62,10 +58,6 @@ router.get("/faillogin", (req, res) => {
 
 router.post("/register", passport.authenticate("register", {failureRedirect:"/failregister"}), async (req, res) => {
     res.send({status:"OK", message:"Usuario registrado!"});
-});
-
-router.get("/failregister", (req, res) => {
-    res.send({status:"Error", message:"Error! No se pudo registar el Usuario!"});
 });
 
 router.get("/restore", async (req, res) => {
