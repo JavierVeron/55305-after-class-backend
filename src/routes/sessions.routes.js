@@ -36,7 +36,7 @@ router.get("/login", passport.authenticate("login", {failureRedirect:"/faillogin
     }
 
     req.session.user = {first_name:req.user.first_name, last_name:req.user.last_name, email:req.user.email, age:req.user.age};
-    res.send({status:"OK", message:"Hola, " + userLogged.first_name + "!"});
+    res.redirect("/products");
 });
 
 /* router.post("/register", async (req, res) => {
