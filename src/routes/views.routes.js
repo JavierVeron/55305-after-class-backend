@@ -53,11 +53,11 @@ router.get("/restore", async (req, res) => {
     res.render("restore");
 });
 
-router.get("/faillogin", (req, res) => {
+router.get("/faillogin", async (req, res) => {
     res.send({status:"error", message:"Login inválido!"});
 });
 
-router.get("/failregister", (req, res) => {
+router.get("/failregister", async (req, res) => {
     res.send({status:"Error", message:"Error! No se pudo registar el Usuario!"});
 });
 
