@@ -5,32 +5,8 @@ import { isValidPassword } from "../utils.js";
 import passport from "passport";
 
 const router = express.Router();
-const UM = new UserManager();
 
-/* router.get("/login", async (req, res) => {
-    let {user, pass} = req.query;
-
-    if (!user || !pass) {
-        return res.status(400).send({status:"Error", message:"Complete los campos obligatorios!"});
-    }
-
-    const userLogged = await UM.login(user);
-
-    if (!isValidPassword(userLogged, pass)) {
-        return res.status(401).send({status:"Error", message:"La contraseña ingresada es incorrecta!"});
-    }
-
-    delete userLogged.password;
-    req.session.user = userLogged;
-
-    if (userLogged) {
-        res.send({status:"OK", message:"Hola, " + userLogged.first_name + "!"});
-    } else {
-        res.status(401).send({status:"Error", message:"No se pudo loguear el Usuario!"});
-    }
-}); */
-
-router.get("/login", passport.authenticate("login", {failureRedirect:"/faillogin"}), async (req, res) => {
+router.post("/login", passport.authenticate("login", {failureRedirect:"/faillogin"}), async (req, res) => {
     if (!req.user) {
         return res.status(401).send({status:"Error", message:"Usuario y Contraseña incorrectos!"});
     }
@@ -39,25 +15,8 @@ router.get("/login", passport.authenticate("login", {failureRedirect:"/faillogin
     res.redirect("/products");
 });
 
-/* router.post("/register", async (req, res) => {
-    const {first_name, last_name, email, age, password} = req.body;
-
-    if (!first_name || !last_name || !email || !password) {
-        return res.status(400).send({status:"Error", message:"Complete los campos obligatorios!"});
-    }
-
-    const user = {first_name, last_name, email, age, password:createHash(password)};
-    const userRegistered = await UM.addUser(user);
-
-    if (userRegistered) {
-        res.send({status:"OK", message:userRegistered});
-    } else {
-        res.status(401).send({status:"Error", message:"No se pudo registrar el Usuario!"});
-    }
-}); */
-
 router.post("/register", passport.authenticate("register", {failureRedirect:"/failregister"}), async (req, res) => {
-    res.send({status:"OK", message:"Usuario registrado!"});
+    res.redirect("/login");
 });
 
 router.get("/restore", async (req, res) => {
@@ -70,6 +29,14 @@ router.get("/restore", async (req, res) => {
     } else {
         res.status(401).send({status:"Error", message:"No se pudo actualizar la contraseña!"});
     }    
-})
+});
+
+router.get("/github", passport.authenticate("github", {scope:["user:email"]}), async (req, res) => {});
+
+router.get("/githubcallback", passport.authenticate("github", {failureRedirect:"/login"}), async (req, res) => {
+    req.session.user = req.user;
+    req.session.loggedIn = true;
+    res.redirect("/products");
+});
 
 export default router;

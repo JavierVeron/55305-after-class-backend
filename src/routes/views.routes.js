@@ -37,15 +37,15 @@ router.get("/chat", (req, res) => {
     res.render("chat");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", async (req, res) => {
     res.render("login");
 });
 
-router.get("/register", (req, res) => {
+router.get("/register", async (req, res) => {
     res.render("register");
 });
 
-router.get("/profile", (req, res) => {
+router.get("/profile", async (req, res) => {
     res.render("profile");
 });
 

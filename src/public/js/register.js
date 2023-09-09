@@ -13,6 +13,7 @@ const registerUser = async () => {
         body: JSON.stringify(user),
     });
     const data = await response.json();
+    console.log(data);
 }
 
 document.getElementById("btnRegister").onclick = registerUser;

@@ -12,14 +12,14 @@ import cartsRouter from "./routes/carts.router.js";
 import sessionsRouter from "./routes/sessions.routes.js";
 import viewsRouter from "./routes/views.routes.js";
 import session from "express-session";
-import cookieParser from "cookie-parser";
+//import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 
 const app = express();
 const puerto = 8080;
-app.use(cookieParser()); 
+//app.use(cookieParser()); 
 app.use(session({
     store:MongoStore.create({
         mongoUrl:"mongodb+srv://CoderJavier:Javier123!@codercluster.rnwzt3p.mongodb.net/ecommerce?retryWrites=true&w=majority",

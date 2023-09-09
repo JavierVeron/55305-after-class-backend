@@ -3,7 +3,11 @@ import { userModel } from "./models/user.model.js";
 class UserManager {
     async addUser(user) {
         try {
-            await userModel.create(user)
+            if (user.email == "adminCoder@coder.com") {
+                user.role = "admin";
+            }
+
+            await userModel.create(user);
             console.log("User added!");
     
             return true;
