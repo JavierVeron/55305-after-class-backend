@@ -10,7 +10,7 @@ const loginUser = async () => {
     const data = await response.json();
     console.log(data);
     
-    if (data.status === "OK") {
+    if (data.status === "ok") {
         location.href = "/products";
     }
 }

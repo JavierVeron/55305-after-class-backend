@@ -1,17 +1,17 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-4 offset-md-4 py-5">
+        <div class="col-md-4 offset-md-4">
             <h1>Iniciá Sesión!</h1>
-            <form>
+            <form method="post" action="/api/sessions/login">
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
-                    <input type="text" class="form-control" id="email">
+                    <input type="text" class="form-control" id="email" name="email">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password">
+                    <input type="password" class="form-control" id="password" name="password">
                 </div>
-                <button type="button" class="btn btn-dark" id="btnLogIn">Iniciar Sesión</button>
+                <button type="submit" class="btn btn-dark" id="btnLogIn">Iniciar Sesión</button>
                 <p class="my-3">¿No tenés Usuario? <a href="/register"><b>Registrate</b></a></p>
                 <p class="my-3">Loguearme con <a href="/api/sessions/github"><b>GitHub</b></a></p>
             </form>
@@ -19,4 +19,4 @@
     </div>
 </div>
 
-<script src="js/login.js"></script>
+{{!-- <script src="js/login.js"></script> --}}
